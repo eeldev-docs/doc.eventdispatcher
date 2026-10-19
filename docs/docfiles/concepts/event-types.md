@@ -1,0 +1,34 @@
+---
+sidebar_position: 1
+description: The nine event types in EventDispatcher and the data each one carries.
+---
+
+# Event Types
+
+Each event has a type that decides what data the callback receives. Every type has its own **Register** and **Invoke** nodes, in an identifier version and a [Name version](/docfiles/concepts/identifiers-vs-names).
+
+| Type | Register node | Invoke node | Data sent | Callback receives |
+|---|---|---|---|---|
+| Simple | Register Simple Event | Invoke Simple Event | nothing | nothing |
+| Payload | Register Payload Event | Invoke Payload Event | **Payload** (Object) | `Payload` (Object) |
+| String | Register String Event | Invoke String Event | **String** | `String` |
+| Int | Register Int Event | Invoke Int Event | **Value** (Integer) | `Value` (Integer) |
+| Float | Register Float Event | Invoke Float Event | **Value** (Float) | `Value` (Float) |
+| Bool | Register Bool Event | Invoke Bool Event | **Value** (Boolean) | `Value` (Boolean) |
+| Vector | Register Vector Event | Invoke Vector Event | **Data** (Vector) | `Data` (Vector) |
+| String + Float | Register String Float Event | Invoke String Float Event | **Data** (`StringFloat` struct) | `Data` with **String** and **Float** |
+| String + Int | Register String Int Event | Invoke String Int Event | **Data** (`StringInt` struct) | `Data` with **String** and **Value** |
+
+Use **Make StringFloat** / **Make StringInt** to build the struct when invoking, and **Break** to read it in the callback.
+
+## The type must match
+A listener is only called when the event is invoked with **the same type** it was registered with. If you register **MyEvent** as an Int event and invoke it with **Invoke Float Event**, nothing is called, and this warning is written to the log:
+
+```
+Event (MyEvent) was invoked as Float but no listener is registered with that type
+```
+
+Registering the same identifier with two different types also logs a warning. Use one type per event.
+
+## Need more data?
+If none of the built-in types fit, send an object with a [Payload event](/docfiles/guides/payload-events). The object can hold any variables you need.

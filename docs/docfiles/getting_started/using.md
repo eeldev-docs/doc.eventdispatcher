@@ -1,35 +1,38 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
+description: Register a listener for a global event and invoke it from anywhere.
 ---
 
 # Using Events
 
+Every event has two sides: a **listener** that registers a callback, and a **sender** that invokes the event. They only share the event's identifier.
+
 ## Registering an Event
-![Image](/img/5.png)
+In the Blueprint that should react to the event, call **Register Simple Event** (for example on **BeginPlay**). Select your identifier and connect a **Custom Event** to the **Callback** pin.
 
-## Executing an Event
-![Image](/img/6.png)
+![Register Simple Event on BeginPlay with MyEvent, bound to a Custom Event that prints a string](/img/5.png)
 
-- Every time you call “Invoke Simple Event” with the “MyEvent” identifier, the registered callback will execute and do whatever logic you implement there.
+The listener stays registered until it is [unregistered](/docfiles/guides/unregistering) or destroyed.
 
-# Payload Events
-You can use custom Objects (a payload) to send any kind of data you want!
+## Invoking an Event
+From any other Blueprint, call **Invoke Simple Event** with the same identifier.
 
-## Creating the payload object
-- Create an object based on the PayloadObject type
+![Invoke Simple Event with MyEvent, triggered by pressing key 1](/img/6.png)
 
-![Image](/img/create_payload.png)
+Every listener registered for **MyEvent** now runs its callback.
 
-- Verify payload object blueprint
+:::info Callbacks run on the next poll
+By default, an invoked event is queued and the callbacks run a moment later (on the next poll, normally the next frame), not inside the **Invoke** call. See [Dispatching and Timing](/docfiles/concepts/dispatching) if you need them to run immediately.
+:::
 
-![Image](/img/payload_settings.png)
+The **Invoke** nodes also have an **Optional Target** pin. Leave it empty to reach every listener, or see [Targeting a Listener](/docfiles/guides/targeting).
 
-- Payload object data
+:::note
+The screenshots are from an older version, before the **Optional Target** pin was added.
+:::
 
-![Image](/img/payload_variables.png)
+## Using a name instead of an identifier
+Every node has a **Name** variant, for example **Register Simple Event Name** and **Invoke Simple Event Name**, that takes a text name instead of a Data Asset. A listener registered with a name is only reached by an invoke with the same name. See [Identifiers vs. Names](/docfiles/concepts/identifiers-vs-names).
 
-## Registering a Payload event
-![Image](/img/register_payload-1.png)
-
-## Calling / Invoking a payload event
-![Image](/img/invoke_payload-2.png)
+## Sending data with an event
+A Simple event carries no data. To send a value, use one of the typed events (String, Int, Float, Bool, Vector, String + Float, String + Int), or send any object as a [payload](/docfiles/guides/payload-events). See [Event Types](/docfiles/concepts/event-types).

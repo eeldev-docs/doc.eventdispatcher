@@ -23,6 +23,14 @@ const sidebars = {
       type: 'doc',
       id: 'purchase-plugin'
     },
+    {
+      type: 'doc',
+      id: 'faq'
+    },
+    {
+      type: 'doc',
+      id: 'changelog'
+    },
     /*
     {
       type: 'link',

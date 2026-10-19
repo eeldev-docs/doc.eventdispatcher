@@ -1,20 +1,32 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
+description: Create an Event Identifier Data Asset that names a global event.
 ---
 
 # Identifiers
 
 ## Event Identifiers
-First we must begin by creating an Event Identifier object, it’s really simple, just follow these steps:
+An Event Identifier is a Data Asset that names an event. Listeners and senders pick the same asset, so typos are impossible and renaming the asset updates every reference.
 
-- Right click in your Content Browser, select “Misc” and “Data Asset“
+If you prefer plain text names, you can skip this step. See [Identifiers vs. Names](/docfiles/concepts/identifiers-vs-names).
 
-![Image](/img/1.png)
+1. Right-click in the Content Browser and select **Miscellaneous → Data Asset**.
 
-- Select the “EventIdentifer” type
+![Content Browser context menu with Miscellaneous → Data Asset selected](/img/1.png)
 
-![Image](/img/2png.png)
+2. Select the **EventIdentifier** class and click **Select**.
 
-- Name your event anything you want, in this example we’ll call it “MyEvent“
+![Pick Data Asset Class dialog with EventIdentifier selected](/img/2png.png)
 
-![Image](/img/3.png)
+3. Name the asset. In this example it is called **MyEvent**.
+
+![The MyEvent asset open in its editor, with the Event Description field, and shown in the Content Browser](/img/3.png)
+
+The optional **Event Description** field on the asset is only there for your own notes and is not used by the plugin.
+
+:::note
+The screenshots on this page are from Unreal Engine 4. The steps are the same in Unreal Engine 5.
+:::
+
+## Next step
+[Register and invoke your first event](/docfiles/getting_started/using).
