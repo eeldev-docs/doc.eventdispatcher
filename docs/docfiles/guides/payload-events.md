@@ -1,11 +1,15 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 description: Send any data with an event by passing an object as a payload.
 ---
 
 # Payload Events
 
-A Payload event sends an object with the event. The object can hold any variables you want, which makes it the most flexible event type.
+A Payload event sends an object with the event. The object can hold any variables you want.
+
+:::tip
+To send a struct instead of an object, use [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events). You don't need to create an object for each event.
+:::
 
 ## Creating the payload object
 1. Create a new Blueprint Class. Under **All Classes**, search for and select **PayloadObject**.

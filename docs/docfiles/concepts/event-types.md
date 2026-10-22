@@ -1,11 +1,15 @@
 ---
 sidebar_position: 1
-description: The nine event types in EventDispatcher and the data each one carries.
+description: The event types in EventDispatcher and the data each one carries.
 ---
 
 # Event Types
 
-Each event has a type that decides what data the callback receives. Every type has its own **Register** and **Invoke** nodes, in an identifier version and a [Name version](/docfiles/concepts/identifiers-vs-names).
+## Gameplay Tag events
+**Register Event** and **Invoke Event** use a Gameplay Tag as identifier and send any struct as payload, so a single pair of nodes covers every kind of data. This is the recommended way for new projects. See [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events).
+
+## Typed events
+The typed events each carry one fixed kind of data. Every type has its own **Register** and **Invoke** nodes, in an identifier version and a [Name version](/docfiles/concepts/identifiers-vs-names).
 
 | Type | Register node | Invoke node | Data sent | Callback receives |
 |---|---|---|---|---|
@@ -21,8 +25,8 @@ Each event has a type that decides what data the callback receives. Every type h
 
 Use **Make StringFloat** / **Make StringInt** to build the struct when invoking, and **Break** to read it in the callback.
 
-## The type must match
-A listener is only called when the event is invoked with **the same type** it was registered with. If you register **MyEvent** as an Int event and invoke it with **Invoke Float Event**, nothing is called, and this warning is written to the log:
+### The type must match
+A typed listener is only called when the event is invoked with **the same type** it was registered with. If you register **MyEvent** as an Int event and invoke it with **Invoke Float Event**, nothing is called, and this warning is written to the log:
 
 ```
 Event (MyEvent) was invoked as Float but no listener is registered with that type

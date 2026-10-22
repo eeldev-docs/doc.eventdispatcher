@@ -7,8 +7,20 @@ description: All Blueprint nodes in the EventDispatcher plugin.
 
 All nodes are in the **Event Dispatcher** category and are also available as static C++ functions on `UEventManager`. The world context pin is filled in automatically in Blueprint.
 
+## Gameplay Tag events
+See [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events).
+
+| Node | Pins |
+|---|---|
+| Register Event | **Event Tag**, **Callback** (Event Tag, Payload), **Include Child Tags** (advanced). Returns **Handle**. |
+| Invoke Event | **Event Tag**, **Payload** (Instanced Struct, optional), **Optional Target** |
+| Wait For Event | **Event Tag**, **Only Trigger Once**, **Include Child Tags** (advanced). Output **On Event** (Event Tag, Payload). |
+| End Task | Stops a **Wait For Event** |
+| Unregister Event By Handle | **Handle**. Resets the handle. |
+| Is Event Handle Registered | **Handle**. Returns whether the listener is still registered. |
+
 ## Register
-Starts listening to an event. **Callback** is the event (usually a Custom Event) that runs when the event is invoked.
+Starts listening to a typed event. **Callback** is the event (usually a Custom Event) that runs when the event is invoked.
 
 | Node | Pins |
 |---|---|
@@ -35,6 +47,7 @@ The data pin depends on the type: none for Simple, **Payload**, **String**, **Va
 | Unregister Event Name By Object | **Event Identifier** (String), **Object** | The listeners **Object** registered for the name |
 | Unregister Event | **Event Identifier** | All listeners for the identifier |
 | Unregister Event Name | **Event Identifier** (String) | All listeners for the name |
+| Unregister All Events For Object | **Object** | Every listener **Object** registered, for any event and type |
 | Unregister Events | | All listeners and all queued events |
 
 See [Unregistering Events](/docfiles/guides/unregistering).

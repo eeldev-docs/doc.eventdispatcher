@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 description: Register, invoke and unregister EventDispatcher events from C++.
 ---
 
@@ -83,10 +83,34 @@ void AScoreDisplay::EndPlay(const EEndPlayReason::Type EndPlayReason)
 }
 ```
 
+## Gameplay Tag events
+`RegisterEvent` returns a handle. Any `USTRUCT` can be sent with `FInstancedStruct::Make`. Add `GameplayTags` to your module dependencies.
+
+```cpp
+UFUNCTION()
+void OnQuestEvent(FGameplayTag EventTag, const FInstancedStruct& Payload);
+
+FEventListenerHandle QuestHandle;
+```
+
+```cpp
+FTagEventDelegate Callback;
+Callback.BindDynamic(this, &AQuestLog::OnQuestEvent);
+QuestHandle = UEventManager::RegisterEvent(this, QuestTag, Callback, true);
+
+UEventManager::InvokeEvent(this, QuestCompletedTag, FInstancedStruct::Make(FQuestCompleted{ QuestId, Reward }));
+
+UEventManager::UnregisterEventByHandle(this, QuestHandle);
+UEventManager::UnregisterAllEventsForObject(this, this);
+```
+
+Read the payload with `Payload.GetPtr<FQuestCompleted>()`, which returns `nullptr` if the payload is another type.
+
 ## Delegate types
 
 | Event type | Delegate | Callback signature |
 |---|---|---|
+| Gameplay Tag | `FTagEventDelegate` | `void(FGameplayTag EventTag, const FInstancedStruct& Payload)` |
 | Simple | `FSimpleEventDelegate` | `void()` |
 | Payload | `FPayloadEventDelegate` | `void(UObject* Payload)` |
 | String | `FStringEventDelegate` | `void(const FString& String)` |

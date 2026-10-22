@@ -6,6 +6,14 @@ description: Changes in each version of the EventDispatcher plugin.
 # Changelog
 
 ## Next release
+- New [Gameplay Tag events](/docfiles/guides/gameplay-tag-events): **Register Event** and **Invoke Event** use a Gameplay Tag as identifier and send any struct as payload.
+- Listeners can optionally receive child tags (**Include Child Tags**).
+- **Register Event** returns a handle. Added **Unregister Event By Handle** and **Is Event Handle Registered**.
+- Added **Unregister All Events For Object**, which removes every listener an object registered, for all event types.
+- Added the async node **Wait For Event**.
+- Requires Unreal Engine 5.0 or newer. Unreal Engine 4.27 is no longer supported.
+
+## 1.6.8
 - Invoked events now run in the order they were invoked, and the queue no longer has a limit of 100 entries.
 - Unregistering a listener cancels its already queued calls.
 - **Unregister Events** no longer stops later events from being queued.

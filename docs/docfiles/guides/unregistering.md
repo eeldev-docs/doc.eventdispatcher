@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 description: Stop listening to events with the Unregister nodes.
 ---
 
@@ -11,10 +11,12 @@ description: Stop listening to events with the Unregister nodes.
 | **Unregister Event Name By Object** | The listeners that **one object** registered for a name |
 | **Unregister Event** | **All** listeners for an identifier, from every object |
 | **Unregister Event Name** | **All** listeners for a name, from every object |
+| **Unregister Event By Handle** | The single listener a [Register Event](/docfiles/guides/gameplay-tag-events) handle refers to |
+| **Unregister All Events For Object** | **Every** listener that **one object** registered, for any event and type |
 | **Unregister Events** | **Every** listener for every event, and the whole queue |
 
 ## Stop listening from one object
-In most cases you want an object to stop listening without affecting anyone else. Use **Unregister Event By Object** with *self* as **Object**, for example on **EndPlay** or when a Widget is closed.
+In most cases you want an object to stop listening without affecting anyone else. Use **Unregister All Events For Object** with *self* as **Object**, for example on **EndPlay** or when a Widget is closed. Use **Unregister Event By Object** to remove only one event.
 
 **Object** must be set. If it is empty, nothing is removed and a warning is logged. To remove every listener, use **Unregister Event** instead.
 
