@@ -18,6 +18,8 @@ description: Stop listening to events with the Unregister nodes.
 ## Stop listening from one object
 In most cases you want an object to stop listening without affecting anyone else. Use **Unregister All Events For Object** with *self* as **Object**, for example on **EndPlay** or when a Widget is closed. Use **Unregister Event By Object** to remove only one event.
 
+![Unregister All Events For Object with self on End Play, and Unregister Event By Object with MyEvent and self from a Custom Event](/img/blueprints/unregister.png)
+
 **Object** must be set. If it is empty, nothing is removed and a warning is logged. To remove every listener, use **Unregister Event** instead.
 
 ## Effect on queued events

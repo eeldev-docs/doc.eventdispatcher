@@ -14,8 +14,8 @@ See [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events).
 |---|---|
 | Register Event | **Event Tag**, **Callback** (Event Tag, Payload), **Include Child Tags** (advanced). Returns **Handle**. |
 | Invoke Event | **Event Tag**, **Payload** (Instanced Struct, optional), **Optional Target** |
-| Wait For Event | **Event Tag**, **Only Trigger Once**, **Include Child Tags** (advanced). Output **On Event** (Event Tag, Payload). |
-| End Task | Stops a **Wait For Event** |
+| Wait For Event | **Event Tag**, **Only Trigger Once**, **Include Child Tags** (advanced). Outputs **Async Task** and **On Event** (Event Tag, Payload). |
+| End Task | **Target** is the **Async Task** of a **Wait For Event**. Stops the wait. |
 | Unregister Event By Handle | **Handle**. Resets the handle. |
 | Is Event Handle Registered | **Handle**. Returns whether the listener is still registered. |
 

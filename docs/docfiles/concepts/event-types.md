@@ -25,6 +25,16 @@ The typed events each carry one fixed kind of data. Every type has its own **Reg
 
 Use **Make StringFloat** / **Make StringInt** to build the struct when invoking, and **Break** to read it in the callback.
 
+### Example: an Int event
+The callback gets one pin for the data, here **Value**. The sender passes the value to the same pin on the **Invoke** node.
+
+![Register Int Event Name with ScoreChanged, a callback that prints Value, and Invoke Int Event Name with the Score variable](/img/blueprints/typed-int-event.png)
+
+### Example: a String + Float event
+Break **Data** in the callback, and build it with **Make StringFloat** when invoking.
+
+![Register String Float Event Name with Damage, a callback that breaks Data into String and Float, and Invoke String Float Event Name with Make StringFloat](/img/blueprints/typed-string-float-event.png)
+
 ### The type must match
 A typed listener is only called when the event is invoked with **the same type** it was registered with. If you register **MyEvent** as an Int event and invoke it with **Invoke Float Event**, nothing is called, and this warning is written to the log:
 
