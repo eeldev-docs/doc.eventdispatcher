@@ -84,7 +84,7 @@ void AScoreDisplay::EndPlay(const EEndPlayReason::Type EndPlayReason)
 ```
 
 ## Gameplay Tag events
-`RegisterEvent` returns a handle. Any `USTRUCT` can be sent with `FInstancedStruct::Make`. Add `GameplayTags` to your module dependencies.
+`RegisterEvent` returns a handle. Any `USTRUCT` can be sent with `FInstancedStruct::Make`. Add `GameplayTags` to your module dependencies, and `StructUtils` on Unreal Engine 5.0 – 5.4.
 
 ```cpp
 UFUNCTION()
@@ -99,10 +99,13 @@ Callback.BindDynamic(this, &AQuestLog::OnQuestEvent);
 QuestHandle = UEventManager::RegisterEvent(this, QuestTag, Callback, true);
 
 UEventManager::InvokeEvent(this, QuestCompletedTag, FInstancedStruct::Make(FQuestCompleted{ QuestId, Reward }));
+UEventManager::InvokeEvent(this, QuestCompletedTag, FInstancedStruct::Make(FQuestCompleted{ QuestId, Reward }), TargetActor);
 
 UEventManager::UnregisterEventByHandle(this, QuestHandle);
 UEventManager::UnregisterAllEventsForObject(this, this);
 ```
+
+The optional target is the last argument of `InvokeEvent`.
 
 Read the payload with `Payload.GetPtr<FQuestCompleted>()`, which returns `nullptr` if the payload is another type.
 
@@ -122,10 +125,14 @@ Read the payload with `Payload.GetPtr<FQuestCompleted>()`, which returns `nullpt
 | String + Int | `FStringIntEventDelegate` | `void(const FStringInt& Data)` |
 
 ## Inspecting the manager
-The manager is a Game Instance subsystem:
+The manager is a Game Instance subsystem. `UEventManager::Get` returns it from any world context object, or `nullptr` if there is no world or game instance. All functions must be called on the game thread:
 
 ```cpp
-UEventManager* Manager = GetGameInstance()->GetSubsystem<UEventManager>();
-const int32 NumListeners = Manager->GetNumRegisteredEvents();
-const int32 NumPending = Manager->GetNumQueuedEvents();
+if (UEventManager* Manager = UEventManager::Get(this))
+{
+	const int32 NumListeners = Manager->GetNumRegisteredEvents();
+	const int32 NumPending = Manager->GetNumQueuedEvents();
+	const bool bRegistered = Manager->IsHandleRegistered(QuestHandle);
+	Manager->RemoveEventByHandle(QuestHandle);
+}
 ```
