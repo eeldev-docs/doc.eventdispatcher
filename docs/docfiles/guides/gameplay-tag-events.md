@@ -80,4 +80,4 @@ The wait stops automatically when the Blueprint that started it is destroyed. To
 **Unregister All Events For Object** also removes the listeners of every **Wait For Event** that the object started, so those waits never fire again.
 
 ## Requirements
-Gameplay Tag events require Unreal Engine 5.0 or newer. On Unreal Engine 5.0 – 5.4 they use the **Struct Utils** plugin, which is enabled together with EventDispatcher. From 5.5, Instanced Structs are part of the engine.
+Gameplay Tag events require Unreal Engine 5.1 or newer. On Unreal Engine 5.1 – 5.4 they use the **Struct Utils** plugin, which is enabled together with EventDispatcher. From 5.5, Instanced Structs are part of the engine.

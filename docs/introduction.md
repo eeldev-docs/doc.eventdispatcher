@@ -30,7 +30,7 @@ UI and HUD updates, quest and inventory changes, game state changes, global noti
 ## Requirements
 | | |
 |---|---|
-| Unreal Engine | 5.0 – 5.8 (versions up to 1.6.8 also support 4.27) |
+| Unreal Engine | 5.1 – 5.8 (versions up to 1.6.8 also support 4.27 and 5.0) |
 | Target platforms | Windows, Mac, Linux, Android, iOS (see the [Fab listing](https://www.fab.com/listings/dc32d4cf-9875-470f-a4e4-0264c4215724) for the full list) |
 | Networking | Events are local to one game instance and are not replicated |
 

@@ -84,7 +84,7 @@ void AScoreDisplay::EndPlay(const EEndPlayReason::Type EndPlayReason)
 ```
 
 ## Gameplay Tag events
-`RegisterEvent` returns a handle. Any `USTRUCT` can be sent with `FInstancedStruct::Make`. Add `GameplayTags` to your module dependencies, and `StructUtils` on Unreal Engine 5.0 – 5.4.
+`RegisterEvent` returns a handle. Any `USTRUCT` can be sent with `FInstancedStruct::Make`. Add `GameplayTags` to your module dependencies, and `StructUtils` on Unreal Engine 5.1 – 5.4.
 
 ```cpp
 UFUNCTION()
