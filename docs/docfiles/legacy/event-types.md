@@ -1,9 +1,14 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
+slug: /docfiles/concepts/event-types
 description: The event types in EventDispatcher and the data each one carries.
 ---
 
 # Event Types
+
+:::caution Deprecated
+This page describes the legacy API, which is deprecated since 2.0 and will be removed in a future major version. Use [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events) instead. See [Migrating to Gameplay Tag Events](/docfiles/legacy/migration).
+:::
 
 ## Gameplay Tag events
 **Register Event** and **Invoke Event** use a Gameplay Tag as identifier and send any struct as payload, so a single pair of nodes covers every kind of data. This is the recommended way for new projects. See [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events).

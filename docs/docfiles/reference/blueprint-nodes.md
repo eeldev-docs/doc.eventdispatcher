@@ -7,7 +7,7 @@ description: All Blueprint nodes in the EventDispatcher plugin.
 
 All nodes are in the **Event Dispatcher** category and are also available as static C++ functions on `UEventManager`. The world context pin is filled in automatically in Blueprint.
 
-## Gameplay Tag events
+## Events
 See [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events).
 
 | Node | Pins |
@@ -16,10 +16,32 @@ See [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events).
 | Invoke Event | **Event Tag**, **Payload** (Instanced Struct, optional), **Optional Target** |
 | Wait For Event | **Event Tag**, **Only Trigger Once**, **Include Child Tags** (advanced). Outputs **Async Task** and **On Event** (Event Tag, Payload). |
 | End Task | **Target** is the **Async Task** of a **Wait For Event**. Stops the wait. |
-| Unregister Event By Handle | **Handle**. Resets the handle. |
-| Is Event Handle Registered | **Handle**. Returns whether the listener is still registered. |
 
-## Register
+By default the callbacks run on the next poll, see [Dispatching and Timing](/docfiles/concepts/dispatching). See [Targeting a Listener](/docfiles/guides/targeting) for **Optional Target**.
+
+## Unregister
+
+| Node | Pins | Removes |
+|---|---|---|
+| Unregister Event By Handle | **Handle** | The listener the handle refers to. Resets the handle. |
+| Unregister All Events For Object | **Object** | Every listener **Object** registered, for any event |
+| Unregister Events | | All listeners and all queued events |
+| Is Event Handle Registered | **Handle** | Nothing. Returns whether the listener is still registered. |
+
+See [Unregistering Events](/docfiles/guides/unregistering).
+
+## Debug
+
+| Node | Description |
+|---|---|
+| Debug Event Manager | Prints every registered listener and every queued event to the Output Log. See [Logging and Debugging](/docfiles/reference/logging). |
+
+## Deprecated nodes
+:::caution
+The Event Identifier and Name nodes below are deprecated since 2.0 and will be removed in a future major version. See [Migrating to Gameplay Tag Events](/docfiles/legacy/migration).
+:::
+
+### Register
 Starts listening to a typed event. **Callback** is the event (usually a Custom Event) that runs when the event is invoked.
 
 | Node | Pins |
@@ -29,7 +51,7 @@ Starts listening to a typed event. **Callback** is the event (usually a Custom E
 
 *Type* is one of Simple, Payload, String, Int, Float, Bool, Vector, String Float or String Int. See [Event Types](/docfiles/concepts/event-types) for each callback's signature.
 
-## Invoke
+### Invoke
 Triggers an event. By default the callbacks run on the next poll, see [Dispatching and Timing](/docfiles/concepts/dispatching).
 
 | Node | Pins |
@@ -39,7 +61,7 @@ Triggers an event. By default the callbacks run on the next poll, see [Dispatchi
 
 The data pin depends on the type: none for Simple, **Payload**, **String**, **Value** (Int, Float, Bool) or **Data** (Vector, String Float, String Int). See [Targeting a Listener](/docfiles/guides/targeting) for **Optional Target**.
 
-## Unregister
+### Unregister
 
 | Node | Pins | Removes |
 |---|---|---|
@@ -47,13 +69,3 @@ The data pin depends on the type: none for Simple, **Payload**, **String**, **Va
 | Unregister Event Name By Object | **Event Identifier** (String), **Object** | The listeners **Object** registered for the name |
 | Unregister Event | **Event Identifier** | All listeners for the identifier |
 | Unregister Event Name | **Event Identifier** (String) | All listeners for the name |
-| Unregister All Events For Object | **Object** | Every listener **Object** registered, for any event and type |
-| Unregister Events | | All listeners and all queued events |
-
-See [Unregistering Events](/docfiles/guides/unregistering).
-
-## Debug
-
-| Node | Description |
-|---|---|
-| Debug Event Manager | Prints every registered listener and every queued event to the Output Log. See [Logging and Debugging](/docfiles/reference/logging). |

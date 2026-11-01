@@ -17,10 +17,10 @@ The Blueprint nodes are now available under the **Event Dispatcher** category.
 If you call the plugin from C++, add the `EventDispatcher` module to your module's `.Build.cs`:
 
 ```csharp
-PrivateDependencyModuleNames.AddRange(new string[] { "EventDispatcher" });
+PrivateDependencyModuleNames.AddRange(new string[] { "EventDispatcher", "GameplayTags" });
 ```
 
-See [Using EventDispatcher from C++](/docfiles/guides/cplusplus) for examples.
+On Unreal Engine 5.1 – 5.4, also add `"StructUtils"` to use `FInstancedStruct`. See [Using EventDispatcher from C++](/docfiles/guides/cplusplus) for examples.
 
 ## Next step
-[Create an Event Identifier](/docfiles/getting_started/identifiers), or skip it and use [named events](/docfiles/concepts/identifiers-vs-names).
+[Register and invoke your first event](/docfiles/getting_started/using).

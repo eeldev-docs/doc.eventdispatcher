@@ -1,34 +1,42 @@
 ---
-sidebar_position: 3
-description: Register a listener for a global event and invoke it from anywhere.
+sidebar_position: 2
+description: Create an event tag, register a listener for it and invoke it from anywhere.
 ---
 
 # Using Events
 
-Every event has two sides: a **listener** that registers a callback, and a **sender** that invokes the event. They only share the event's identifier.
+Every event has two sides: a **listener** that registers a callback, and a **sender** that invokes the event. They only share the event's **Gameplay Tag**.
 
-## Registering an Event
-In the Blueprint that should react to the event, call **Register Simple Event** (for example on **BeginPlay**). Select your identifier and connect a **Custom Event** to the **Callback** pin.
+## 1. Create a tag
+Open **Project Settings → Project → GameplayTags** and add a tag for your event, for example:
 
-![Register Simple Event on BeginPlay with MyEvent, bound to the Custom Event OnMyEvent that prints a string](/img/blueprints/using-register.png)
+```
+Event.Quest.Completed
+```
 
-The listener stays registered until it is [unregistered](/docfiles/guides/unregistering) or destroyed.
+Any Gameplay Tag works. Starting your event tags with a root like `Event.` keeps them together in the tag picker.
 
-## Invoking an Event
-From any other Blueprint, call **Invoke Simple Event** with the same identifier.
+## 2. Register a listener
+In the Blueprint that should react to the event, call **Register Event** (for example on **BeginPlay**). Pick the **Event Tag** and connect a **Custom Event** to the **Callback** pin.
 
-![Invoke Simple Event with MyEvent and an empty Optional Target, triggered by pressing key 1](/img/blueprints/using-invoke.png)
+![Register Event on BeginPlay with Event.Quest and Include Child Tags, saving the handle in Quest Handle. The callback OnQuestEvent prints the Event Tag](/img/blueprints/tag-register.png)
 
-Every listener registered for **MyEvent** now runs its callback.
+The callback receives the **Event Tag** that was invoked and the **Payload** that was sent. Save the returned **Handle** if you want to [unregister](/docfiles/guides/unregistering) this listener later. Otherwise it stays registered until its object is destroyed.
+
+## 3. Invoke the event
+From any other Blueprint, call **Invoke Event** with the same tag. Leave **Payload** unconnected to send no data, or connect a **Make Instanced Struct** with any struct to send data.
+
+![Make String Int connected to Make Instanced Struct, passed as Payload to Invoke Event with Event.Quest.Completed](/img/blueprints/tag-invoke.png)
+
+Every listener registered for **Event.Quest.Completed** now runs its callback.
 
 :::info Callbacks run on the next poll
-By default, an invoked event is queued and the callbacks run a moment later (on the next poll, normally the next frame), not inside the **Invoke** call. See [Dispatching and Timing](/docfiles/concepts/dispatching) if you need them to run immediately.
+By default, an invoked event is queued and the callbacks run a moment later (on the next poll, normally the next frame), not inside the **Invoke Event** call. See [Dispatching and Timing](/docfiles/concepts/dispatching) if you need them to run immediately.
 :::
 
-The **Invoke** nodes also have an **Optional Target** pin. Leave it empty to reach every listener, or see [Targeting a Listener](/docfiles/guides/targeting).
+**Invoke Event** also has an **Optional Target** pin. Leave it empty to reach every listener, or see [Targeting a Listener](/docfiles/guides/targeting).
 
-## Using a name instead of an identifier
-Every node has a **Name** variant, for example **Register Simple Event Name** and **Invoke Simple Event Name**, that takes a text name instead of a Data Asset. A listener registered with a name is only reached by an invoke with the same name. See [Identifiers vs. Names](/docfiles/concepts/identifiers-vs-names).
-
-## Sending data with an event
-A Simple event carries no data. To send a value, use one of the typed events (String, Int, Float, Bool, Vector, String + Float, String + Int), or send any object as a [payload](/docfiles/guides/payload-events). See [Event Types](/docfiles/concepts/event-types).
+## Next steps
+- Read the payload in the callback, listen to child tags and use **Wait For Event**: [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events).
+- Stop listening: [Unregistering Events](/docfiles/guides/unregistering).
+- Use the plugin from code: [Using EventDispatcher from C++](/docfiles/guides/cplusplus).

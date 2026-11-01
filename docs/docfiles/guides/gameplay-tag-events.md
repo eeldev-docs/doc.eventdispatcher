@@ -5,9 +5,9 @@ description: Use Gameplay Tags as event identifiers and send any struct as paylo
 
 # Gameplay Tag Events
 
-Gameplay Tag events are the recommended way to use EventDispatcher. One set of nodes covers every kind of data:
+Gameplay Tag events are how you use EventDispatcher. One set of nodes covers every kind of data:
 
-- The event is identified by a **Gameplay Tag**, for example `Game.Quest.Completed`.
+- The event is identified by a **Gameplay Tag**, for example `Event.Quest.Completed`.
 - Any **struct** can be sent as payload, or nothing at all.
 - **Register Event** returns a **handle** that unregisters exactly that listener.
 - **Wait For Event** waits for an event directly in the Blueprint graph.

@@ -19,11 +19,12 @@ Call the **Debug Event Manager** node to print every registered listener (name a
 
 | Message | Meaning |
 |---|---|
-| *Event (X) was invoked as T but no listener is registered with that type* | Listeners exist for X, but with a different [type](/docfiles/concepts/event-types). |
-| *Event (X) is registered as both A and B* | The same event is used with two types. Use one type per event. |
+| *Event (X) was invoked as T but no listener is registered with that type* | Listeners exist for X, but with a different [type](/docfiles/concepts/event-types). Deprecated events only. |
+| *Event (X) is registered as both A and B* | The same event is used with two types. Use one type per event. Deprecated events only. |
 | *Event (X) was registered without a bound callback* | The **Callback** pin was not connected. The listener was not added. |
 | *No Object was specified, nothing was unregistered* | **Unregister … By Object** was called without an **Object**. |
-| *Event (X) was invoked but has no listeners* (verbose) | Nobody is listening, or the [identifier or name](/docfiles/concepts/identifiers-vs-names) does not match. |
+| *Event (X) was invoked but has no listeners* (verbose) | Nobody is listening, or the tag does not match. |
 | *Event (X) is already registered for this callback* (verbose) | A duplicate registration was ignored. |
-| *No EventIdentifier was specified* | The **Event Identifier** pin is empty. |
+| *No EventTag was specified* | The **Event Tag** pin is empty. |
+| *No EventIdentifier was specified* | The **Event Identifier** pin of a deprecated node is empty. |
 | *No GameInstance found* | The world context has no Game Instance, for example in an editor-only utility. |

@@ -1,9 +1,14 @@
 ---
 sidebar_position: 2
+slug: /docfiles/concepts/identifiers-vs-names
 description: The difference between Event Identifier assets and named events, and when to use each.
 ---
 
 # Identifiers vs. Names
+
+:::caution Deprecated
+This page describes the legacy API, which is deprecated since 2.0 and will be removed in a future major version. Use [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events) instead. See [Migrating to Gameplay Tag Events](/docfiles/legacy/migration).
+:::
 
 An event can be identified in two ways:
 
@@ -23,8 +28,8 @@ An event can be identified in two ways:
 Identifier events, named events and Gameplay Tag events never reach each other, even if the name matches the asset name. A listener registered with the **MyEvent** asset is **not** called by **Invoke Simple Event Name** with `"MyEvent"`, and the other way around. Use the same kind on both sides.
 
 ## Which should I use?
-- Use **Gameplay Tags** for new projects. You get typo-safety, hierarchies and struct payloads with a single pair of nodes.
-- Use **Event Identifiers** for fixed, project-wide typed events. They are safer and easier to refactor than names.
-- Use **Names** when the event name is built at runtime or comes from data, such as per-instance events.
+Use **Gameplay Tags**. Event Identifiers and Names are deprecated. Tags are typo-safe like identifiers, need no asset per event, support hierarchies and send any struct with a single pair of nodes.
+
+If the event name was built at runtime, for example `"DoorOpened_" + DoorID`, use one tag such as `Event.Door.Opened` and either pass the door as **Optional Target** or send the ID in the payload. See [Migrating to Gameplay Tag Events](/docfiles/legacy/migration).
 
 An empty name or a missing identifier is rejected, and the editor reports *No EventIdentifier was specified*.

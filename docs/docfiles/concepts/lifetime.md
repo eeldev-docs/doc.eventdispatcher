@@ -20,7 +20,7 @@ A listener stays registered until one of these happens:
 
 - It is removed with one of the [Unregister nodes](/docfiles/guides/unregistering).
 - The object that owns the callback is destroyed. It is then removed automatically.
-- The Event Identifier asset it was registered with is unloaded.
+- The Event Identifier asset it was registered with is unloaded (deprecated identifier events only).
 - The game instance shuts down.
 
 Destroyed listeners are cleaned up automatically, so destroyed Actors never receive callbacks. Unregistering explicitly is still good practice for objects that should stop listening while they are alive.

@@ -1,9 +1,14 @@
 ---
-sidebar_position: 2
+sidebar_position: 5
+slug: /docfiles/guides/payload-events
 description: Send any data with an event by passing an object as a payload.
 ---
 
 # Payload Events
+
+:::caution Deprecated
+This page describes the legacy API, which is deprecated since 2.0 and will be removed in a future major version. Use [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events) instead. See [Migrating to Gameplay Tag Events](/docfiles/legacy/migration).
+:::
 
 A Payload event sends an object with the event. The object can hold any variables you want.
 

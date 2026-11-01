@@ -6,7 +6,7 @@ description: Changes in each version of the EventDispatcher plugin.
 # Changelog
 
 ## 2.0.0
-Existing Event Identifier and named events work as before, so Blueprints from 1.6.x need no changes.
+Existing Event Identifier and named events still work, so Blueprints from 1.6.x keep running, but those nodes are now deprecated. See [Migrating to Gameplay Tag Events](/docfiles/legacy/migration).
 
 - New [Gameplay Tag events](/docfiles/guides/gameplay-tag-events): **Register Event** and **Invoke Event** use a Gameplay Tag as identifier and send any struct as payload.
 - Listeners can optionally receive child tags (**Include Child Tags**).
@@ -15,6 +15,7 @@ Existing Event Identifier and named events work as before, so Blueprints from 1.
 - Added the async node **Wait For Event**.
 - C++: added `UEventManager::Get()` and `RemoveEventByHandle()`.
 - Requires Unreal Engine 5.1 or newer. Unreal Engine 4.27 and 5.0 are no longer supported. The module depends on `GameplayTags`, and on `StructUtils` for Unreal Engine 5.1 – 5.4.
+- Deprecated all Event Identifier and Name nodes (Register, Invoke and Unregister, in every typed variant). They show a warning when the Blueprint is compiled and will be removed in a future major version.
 
 ## 1.6.8
 - Invoked events now run in the order they were invoked, and the queue no longer has a limit of 100 entries.

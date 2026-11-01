@@ -8,10 +8,10 @@ description: Register, invoke and unregister EventDispatcher events from C++.
 Every Blueprint node is a static function on `UEventManager`, so the C++ API matches the Blueprint API.
 
 ## Setup
-Add the module to your `.Build.cs`:
+Add the modules to your `.Build.cs`. On Unreal Engine 5.1 – 5.4, also add `StructUtils`:
 
 ```csharp
-PrivateDependencyModuleNames.AddRange(new string[] { "EventDispatcher" });
+PrivateDependencyModuleNames.AddRange(new string[] { "EventDispatcher", "GameplayTags" });
 ```
 
 Include the header:
@@ -24,8 +24,20 @@ Include the header:
 The callbacks are dynamic delegates, so the function you bind must be a `UFUNCTION()`. Lambdas and raw function pointers are not supported.
 
 ```cpp
+USTRUCT(BlueprintType)
+struct FQuestCompleted
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 QuestId = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Reward = 0;
+};
+
 UCLASS()
-class AScoreDisplay : public AActor
+class AQuestLog : public AActor
 {
 	GENERATED_BODY()
 
@@ -34,95 +46,65 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UFUNCTION()
-	void OnScoreChanged(int32 NewScore);
+	void OnQuestEvent(FGameplayTag EventTag, const FInstancedStruct& Payload);
 
 	UPROPERTY(EditAnywhere)
-	UEventIdentifier* ScoreChangedEvent;
+	FGameplayTag QuestTag;
+
+	FEventListenerHandle QuestHandle;
 };
 ```
 
 ## Registering
+`RegisterEvent` returns a handle. The last argument is **Include Child Tags**.
 
 ```cpp
-void AScoreDisplay::BeginPlay()
+void AQuestLog::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FIntEventDelegate Callback;
-	Callback.BindDynamic(this, &AScoreDisplay::OnScoreChanged);
+	FTagEventDelegate Callback;
+	Callback.BindDynamic(this, &AQuestLog::OnQuestEvent);
 
-	UEventManager::RegisterIntEvent(this, ScoreChangedEvent, Callback);
+	QuestHandle = UEventManager::RegisterEvent(this, QuestTag, Callback, true);
 }
 ```
 
-The first argument is the world context and also the object that [Optional Target](/docfiles/guides/targeting) and **Unregister … By Object** match against.
-
-For a named event:
-
-```cpp
-UEventManager::RegisterIntEventName(this, TEXT("ScoreChanged"), Callback);
-```
+The first argument is the world context and also the object that [Optional Target](/docfiles/guides/targeting) and **Unregister All Events For Object** match against.
 
 ## Invoking
+Any `USTRUCT` can be sent with `FInstancedStruct::Make`. The optional target is the last argument.
 
 ```cpp
-UEventManager::InvokeIntEvent(this, nullptr, ScoreChangedEvent, 42);
-UEventManager::InvokeIntEventName(this, nullptr, TEXT("ScoreChanged"), 42);
+UEventManager::InvokeEvent(this, QuestCompletedTag, FInstancedStruct::Make(FQuestCompleted{ QuestId, Reward }));
+UEventManager::InvokeEvent(this, QuestCompletedTag, FInstancedStruct::Make(FQuestCompleted{ QuestId, Reward }), TargetActor);
+UEventManager::InvokeEvent(this, QuestStartedTag, FInstancedStruct());
 ```
 
-The second argument is the optional target. Pass `nullptr` to reach every listener.
+## Reading the payload
+`Payload.GetPtr<FQuestCompleted>()` returns `nullptr` if the payload is another type or empty.
+
+```cpp
+void AQuestLog::OnQuestEvent(FGameplayTag EventTag, const FInstancedStruct& Payload)
+{
+	if (const FQuestCompleted* Completed = Payload.GetPtr<FQuestCompleted>())
+	{
+		UE_LOG(LogTemp, Log, TEXT("%s: quest %d, reward %d"), *EventTag.ToString(), Completed->QuestId, Completed->Reward);
+	}
+}
+```
 
 ## Unregistering
 
 ```cpp
-void AScoreDisplay::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void AQuestLog::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	UEventManager::UnregisterEventByObject(this, ScoreChangedEvent, this);
+	UEventManager::UnregisterEventByHandle(this, QuestHandle);
+	UEventManager::UnregisterAllEventsForObject(this, this);
 
 	Super::EndPlay(EndPlayReason);
 }
 ```
-
-## Gameplay Tag events
-`RegisterEvent` returns a handle. Any `USTRUCT` can be sent with `FInstancedStruct::Make`. Add `GameplayTags` to your module dependencies, and `StructUtils` on Unreal Engine 5.1 – 5.4.
-
-```cpp
-UFUNCTION()
-void OnQuestEvent(FGameplayTag EventTag, const FInstancedStruct& Payload);
-
-FEventListenerHandle QuestHandle;
-```
-
-```cpp
-FTagEventDelegate Callback;
-Callback.BindDynamic(this, &AQuestLog::OnQuestEvent);
-QuestHandle = UEventManager::RegisterEvent(this, QuestTag, Callback, true);
-
-UEventManager::InvokeEvent(this, QuestCompletedTag, FInstancedStruct::Make(FQuestCompleted{ QuestId, Reward }));
-UEventManager::InvokeEvent(this, QuestCompletedTag, FInstancedStruct::Make(FQuestCompleted{ QuestId, Reward }), TargetActor);
-
-UEventManager::UnregisterEventByHandle(this, QuestHandle);
-UEventManager::UnregisterAllEventsForObject(this, this);
-```
-
-The optional target is the last argument of `InvokeEvent`.
-
-Read the payload with `Payload.GetPtr<FQuestCompleted>()`, which returns `nullptr` if the payload is another type.
-
-## Delegate types
-
-| Event type | Delegate | Callback signature |
-|---|---|---|
-| Gameplay Tag | `FTagEventDelegate` | `void(FGameplayTag EventTag, const FInstancedStruct& Payload)` |
-| Simple | `FSimpleEventDelegate` | `void()` |
-| Payload | `FPayloadEventDelegate` | `void(UObject* Payload)` |
-| String | `FStringEventDelegate` | `void(const FString& String)` |
-| Int | `FIntEventDelegate` | `void(int32 Value)` |
-| Float | `FFloatEventDelegate` | `void(float Value)` |
-| Bool | `FBoolEventDelegate` | `void(bool Value)` |
-| Vector | `FVectorEventDelegate` | `void(const FVector& Data)` |
-| String + Float | `FStringFloatEventDelegate` | `void(const FStringFloat& Data)` |
-| String + Int | `FStringIntEventDelegate` | `void(const FStringInt& Data)` |
 
 ## Inspecting the manager
 The manager is a Game Instance subsystem. `UEventManager::Get` returns it from any world context object, or `nullptr` if there is no world or game instance. All functions must be called on the game thread:
@@ -136,3 +118,19 @@ if (UEventManager* Manager = UEventManager::Get(this))
 	Manager->RemoveEventByHandle(QuestHandle);
 }
 ```
+
+## Deprecated functions
+The Event Identifier and Name functions (`RegisterIntEvent`, `InvokeIntEventName`, `UnregisterEventByObject`, …) are deprecated and will be removed in a future major version. See [Migrating to Gameplay Tag Events](/docfiles/legacy/migration).
+
+| Event type | Delegate | Callback signature |
+|---|---|---|
+| Gameplay Tag | `FTagEventDelegate` | `void(FGameplayTag EventTag, const FInstancedStruct& Payload)` |
+| Simple (deprecated) | `FSimpleEventDelegate` | `void()` |
+| Payload (deprecated) | `FPayloadEventDelegate` | `void(UObject* Payload)` |
+| String (deprecated) | `FStringEventDelegate` | `void(const FString& String)` |
+| Int (deprecated) | `FIntEventDelegate` | `void(int32 Value)` |
+| Float (deprecated) | `FFloatEventDelegate` | `void(float Value)` |
+| Bool (deprecated) | `FBoolEventDelegate` | `void(bool Value)` |
+| Vector (deprecated) | `FVectorEventDelegate` | `void(const FVector& Data)` |
+| String + Float (deprecated) | `FStringFloatEventDelegate` | `void(const FStringFloat& Data)` |
+| String + Int (deprecated) | `FStringIntEventDelegate` | `void(const FStringInt& Data)` |

@@ -1,9 +1,14 @@
 ---
-sidebar_position: 2
+sidebar_position: 4
+slug: /docfiles/getting_started/identifiers
 description: Create an Event Identifier Data Asset that names a global event.
 ---
 
 # Identifiers
+
+:::caution Deprecated
+This page describes the legacy API, which is deprecated since 2.0 and will be removed in a future major version. Use [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events) instead. See [Migrating to Gameplay Tag Events](/docfiles/legacy/migration).
+:::
 
 ## Event Identifiers
 An Event Identifier is a Data Asset that names an event. Listeners and senders pick the same asset, so typos are impossible and renaming the asset updates every reference.
@@ -29,4 +34,4 @@ The screenshots on this page are from Unreal Engine 4. The steps are the same in
 :::
 
 ## Next step
-[Register and invoke your first event](/docfiles/getting_started/using).
+[Event Types](/docfiles/concepts/event-types) lists the legacy Register and Invoke nodes. For new code, use [Gameplay Tag Events](/docfiles/guides/gameplay-tag-events).
